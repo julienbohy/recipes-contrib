@@ -1,0 +1,93 @@
+{
+    "manifests": {
+        "phem/phem": {
+            "manifest": {
+                "bundles": {
+                    "Phem\\PhemBundle": [
+                        "all"
+                    ]
+                },
+                "copy-from-recipe": {
+                    ".symfony.local.yaml": ".symfony.local.yaml",
+                    "src/": "%SRC_DIR%/"
+                },
+                "post-install-output": [
+                    "  * Start the web server: <comment>symfony serve</>",
+                    "    It also runs <comment>vendor/bin/phemc watch src</>, which compiles the <comment>.phpm</> files when you save them",
+                    "  * Open the URL that it shows: the page of <comment>src/Page/Home.phpm</> is at <comment>/</>",
+                    "  * Read the guide: <comment>https://github.com/phemphp/phem/blob/main/docs/getting-started.md</>"
+                ]
+            },
+            "files": {
+                ".symfony.local.yaml": {
+                    "contents": [
+                        "workers:",
+                        "    # Compiles the .phpm files, and compiles them again when you save them.",
+                        "    phemc:",
+                        "        cmd: ['vendor/bin/phemc', 'watch', 'src']",
+                        ""
+                    ],
+                    "executable": false
+                },
+                "src/Component/Document.phpm": {
+                    "contents": [
+                        "<?phpm",
+                        "",
+                        "namespace App\\Component;",
+                        "",
+                        "use Phem\\Attribute\\Component;",
+                        "use Phem\\{Html, Node, Root};",
+                        "",
+                        "// The HTML document of the pages. A page gives its title with <Document:title>.",
+                        "#[Component]",
+                        "function Document(Html $title, Html $children): Node",
+                        "{",
+                        "    return (",
+                        "        <html lang=\"en\">",
+                        "            <head>",
+                        "                <meta charset=\"utf-8\" />",
+                        "                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />",
+                        "                <title>{{ title }}</title>",
+                        "                <link rel=\"icon\" href=\"data:,\" />",
+                        "                {{ importmap('app') }}",
+                        "            </head>",
+                        "            <body>",
+                        "                <Root>{{ children }}</Root>",
+                        "            </body>",
+                        "        </html>",
+                        "    );",
+                        "}",
+                        ""
+                    ],
+                    "executable": false
+                },
+                "src/Page/Home.phpm": {
+                    "contents": [
+                        "<?phpm",
+                        "",
+                        "namespace App\\Page;",
+                        "",
+                        "use Phem\\Attribute\\Page;",
+                        "use Phem\\Node;",
+                        "",
+                        "use function App\\Component\\Document;",
+                        "",
+                        "#[Page('/')]",
+                        "function Home(): Node",
+                        "{",
+                        "    return (",
+                        "        <Document>",
+                        "            <Document:title>My app</Document:title>",
+                        "            <h1>Hello, Phem!</h1>",
+                        "        </Document>",
+                        "    );",
+                        "}",
+                        ""
+                    ],
+                    "executable": false
+                }
+            },
+            "ref": "37b8d8a8441a236e0c11a4388769d87e5cf3ee16"
+        }
+    }
+}
